@@ -1,81 +1,25 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
-from semantic_engine import semantic_similarity_score
+from sentence_transformers import SentenceTransformer, util
+
+# Load model once when server starts
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
 def keyword_match_score(resume_text, jd_text):
 
-    # ---- TF-IDF similarity ----
-    vectorizer = TfidfVectorizer(stop_words="english")
-    vectors = vectorizer.fit_transform([resume_text, jd_text])
+    # Generate embeddings
+    resume_embedding = model.encode(resume_text, convert_to_tensor=True)
+    jd_embedding = model.encode(jd_text, convert_to_tensor=True)
 
-    tfidf_similarity = cosine_similarity(vectors[0:1], vectors[1:2])[0][0]
+    # Calculate semantic similarity
+    similarity_score = util.cos_sim(resume_embedding, jd_embedding).item()
 
-    # ---- Semantic similarity ----
-    semantic_score, semantic_similarity = semantic_similarity_score(
-        resume_text,
-        jd_text
-    )
+    # Convert to percentage score
+    keyword_score = int(similarity_score * 100)
 
-    # ---- Hybrid similarity ----
-    hybrid_similarity = (0.4 * tfidf_similarity) + (0.6 * semantic_similarity)
+    # Simple missing keyword detection
+    resume_words = set(resume_text.lower().split())
+    jd_words = set(jd_text.lower().split())
 
-    keyword_score = round(hybrid_similarity * 100, 2)
+    missing_keywords = list(jd_words - resume_words)
 
-    missing_keywords = find_missing_keywords(vectorizer, vectors)
-
-    return keyword_score, hybrid_similarity, missing_keywords
-
-
-def find_missing_keywords(vectorizer, vectors):
-
-    feature_names = np.array(vectorizer.get_feature_names_out())
-
-    jd_vector = vectors[1].toarray()[0]
-    resume_vector = vectors[0].toarray()[0]
-
-    important_indices = jd_vector.argsort()[-50:]
-
-    missing = []
-
-    # Generic non-technical words
-    generic_words = [
-        "looking", "developer", "experience", "skills",
-        "knowledge", "team", "work", "strong",
-        "candidate", "applications", "backend",
-        "cloud", "ci", "cd", "deploying",
-        "preferred", "plus", "services",
-        "building", "using", "should",
-        "familiarity", "development",
-        "engineer", "software", "practices",
-        "databases", "pipelines"
-    ]
-
-    # Basic technical indicator keywords
-    tech_indicators = [
-        "python", "java", "c++", "sql",
-        "fastapi", "flask", "django",
-        "docker", "kubernetes", "aws",
-        "tensorflow", "pytorch",
-        "scikit", "redis", "postgres",
-        "mongodb", "azure", "gcp",
-        "spark", "hadoop", "api"
-    ]
-
-    for idx in important_indices:
-        word = feature_names[idx]
-
-        if (
-            resume_vector[idx] == 0
-            and word not in generic_words
-            and len(word) > 3
-        ):
-
-            # Only keep tech-like words
-            if any(tech in word for tech in tech_indicators):
-                missing.append(word)
-
-    missing = list(dict.fromkeys(missing))
-
-    return missing[:8]
+    return keyword_score, similarity_score, missing_keywords[:10]
