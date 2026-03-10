@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
-from app.analysis_service import analyze_resume
+from analysis_service import analyze_resume
 
 app = FastAPI()
 

@@ -1,7 +1,7 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from app.semantic_engine import semantic_similarity_score
+from semantic_engine import semantic_similarity_score
 
 
 def keyword_match_score(resume_text, jd_text):

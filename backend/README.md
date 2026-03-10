@@ -1,12 +1,22 @@
-# AI Resume Analyzer - Backend
+---
+title: AI Resume Analyzer
+emoji: 🚀
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_file: app.py
+pinned: false
+---
 
-FastAPI backend for resume analysis and ATS scoring.
+# AI Resume Analyzer
 
-## Run Locally
+Production-ready FastAPI backend for ATS scoring and resume analysis.
 
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+## Features
 
-## Deployment
-
-Deployable to Render.
+- Keyword match scoring
+- ATS compatibility checks
+- Semantic similarity scoring
+- Impact detection
+- Grammar analysis
+- Structured scoring breakdown

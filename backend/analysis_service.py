@@ -1,12 +1,12 @@
-from app.resume_parser import extract_text
-from app.keyword_engine import keyword_match_score
-from app.ats_checker import check_ats_rules
-from app.impact_analyzer import analyze_impact
-from app.skills_engine import calculate_skills_score
-from app.structure_engine import analyze_structure
-from app.grammar_engine import analyze_grammar
-from app.scoring_engine import calculate_final_score
-from app.suggestion_engine import generate_suggestions
+from resume_parser import extract_text
+from keyword_engine import keyword_match_score
+from ats_checker import check_ats_rules
+from impact_analyzer import analyze_impact
+from skills_engine import calculate_skills_score
+from structure_engine import analyze_structure
+from grammar_engine import analyze_grammar
+from scoring_engine import calculate_final_score
+from suggestion_engine import generate_suggestions
 
 
 def analyze_resume(file_path, jd_text):
