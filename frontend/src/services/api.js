@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://Badkarma11-ai-resume-analyzer.hf.space"
+  baseURL: process.env.REACT_APP_API_URL
 });
 
 export const analyzeResume = async (file, jobDescription) => {
