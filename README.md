@@ -38,5 +38,11 @@ ATS formatting checks
 Semantic similarity scoring
 Actionable improvement suggestions
 
+## 📸 Screenshots
+
+| Upload | Input | Result | Analysis |
+|--------|------|--------|----------|
+| ![](assets/screenshots/upload.png) | ![](assets/screenshots/input.png) | ![](assets/screenshots/result.png) | ![](assets/screenshots/analysis.png) |
+
 👨‍💻 Author
 Pranesh
