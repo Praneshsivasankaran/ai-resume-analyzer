@@ -1,42 +1,29 @@
-🚀 AI Resume Analyzer
+# 📄 AI Resume Analyzer
 
-An AI-powered ATS Resume Screening System that analyzes resumes against job descriptions and generates a score out of 100 with actionable improvement suggestions.
-Built using FastAPI + React + NLP + ML, deployed on Netlify & Render.
+An AI-powered web application that evaluates resumes against job descriptions using NLP and machine learning to generate ATS scores, insights, and improvement suggestions.
 
+---
 
-🏗️ Architecture
-User → Frontend (React)
-       ↓
-Backend (FastAPI)
-       ↓
-Resume Parser + NLP Engine
-       ↓
-Scoring Engine
-       ↓
-Score + Suggestions Dashboard
+## 🚀 Overview
 
+This project helps users understand how well their resume matches a job description by analyzing skills, keywords, structure, and overall alignment.
 
-⚙️ Tech Stack
-Frontend: React / Next.js
-Backend: FastAPI
-NLP: spaCy, TF-IDF, Sentence Transformers
-Parsing: pdfplumber, python-docx
-Deployment: Netlify + Render
+It is designed to simulate real-world ATS (Applicant Tracking System) behavior.
 
-📊 Scoring Model (100 Points)
-Keyword Match – 35
-ATS Compliance – 20
-Impact Score – 15
-Skills – 10
-Structure – 10
-Grammar – 10
+---
 
-🎯 Key Features
-Resume & JD matching
-Missing keyword detection
-ATS formatting checks
-Semantic similarity scoring
-Actionable improvement suggestions
+## ✨ Features
+
+- 📄 Upload Resume (PDF)
+- 📝 Paste Job Description
+- 🤖 NLP-based Resume Analysis
+- 📊 ATS Score Calculation (0–100)
+- 🔍 Keyword & Skill Matching
+- 📈 Detailed Breakdown (Skills, Impact, Structure, ATS)
+- 📊 Visual Analytics (Radar Chart)
+- 💡 Smart Suggestions for Improvement
+
+---
 
 ## 📸 Screenshots
 
@@ -44,5 +31,32 @@ Actionable improvement suggestions
 |--------|------|--------|----------|
 | ![](assets/screenshots/upload.png) | ![](assets/screenshots/input.png) | ![](assets/screenshots/result.png) | ![](assets/screenshots/analysis.png) |
 
+---
+
+## 🧠 How It Works
+
+1. Extracts text from uploaded resume
+2. Processes job description input
+3. Converts text into embeddings
+4. Calculates similarity using NLP models
+5. Generates ATS score and insights
+6. Identifies missing skills and suggestions
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend:** React.js
+- **Backend:** FastAPI
+- **Machine Learning:** Sentence Transformers (NLP)
+- **Languages:** Python, JavaScript
+- **Deployment:** Netlify (Frontend), Render (Backend)
+
+---
+
 👨‍💻 Author
-Pranesh
+Pranesh S
+
+⭐ Support
+
+If you like this project, give it a ⭐ on GitHub!
