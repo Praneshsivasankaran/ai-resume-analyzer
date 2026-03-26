@@ -56,7 +56,3 @@ It is designed to simulate real-world ATS (Applicant Tracking System) behavior.
 
 👨‍💻 Author
 Pranesh S
-
-⭐ Support
-
-If you like this project, give it a ⭐ on GitHub!
