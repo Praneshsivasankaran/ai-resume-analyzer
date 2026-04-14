@@ -86,4 +86,12 @@ def calculate_skills_score(resume_text, jd_text):
     missing = jd_skills - resume_skills
 
     ratio = len(matched) / len(jd_skills)
-    scor
+    score = int(round(ratio * 100))
+
+    stats = {
+        "matched": sorted(matched),
+        "total_jd_skills": len(jd_skills),
+        "matched_count": len(matched),
+    }
+
+    return score, sorted(missing), stats
