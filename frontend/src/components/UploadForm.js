@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { analyzeResume } from "../services/api";
+import UploadZone from "./UploadZone";
+import "./UploadForm.css";
 
 function UploadForm({ setResult }) {
   const [file, setFile] = useState(null);
@@ -23,51 +25,59 @@ function UploadForm({ setResult }) {
     setLoading(false);
   };
 
+  const charCount = jobDescription.length;
+  const minChars = 200;
+  const charCountValid = charCount >= minChars;
+
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "40px" }}>
-      <div style={{ marginBottom: "15px" }}>
-        <input
-          type="file"
-          accept=".pdf,.docx"
-          onChange={(e) => setFile(e.target.files[0])}
-          style={{
-            padding: "10px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
-            width: "100%"
-          }}
-        />
+    <form onSubmit={handleSubmit} className="upload-form">
+      <div className="form-field">
+        <label className="form-label">
+          <span className="form-label-mono">01</span>
+          Upload resume
+        </label>
+        <UploadZone file={file} onFileSelect={setFile} />
       </div>
 
-      <textarea
-        placeholder="Paste Job Description"
-        value={jobDescription}
-        onChange={(e) => setJobDescription(e.target.value)}
-        rows="6"
-        style={{
-          width: "100%",
-          padding: "12px",
-          borderRadius: "8px",
-          border: "1px solid #ddd",
-          resize: "vertical",
-          marginBottom: "15px"
-        }}
-      />
+      <div className="form-field">
+        <label className="form-label">
+          <span className="form-label-mono">02</span>
+          Paste job description
+        </label>
+        <div className="textarea-wrapper">
+          <textarea
+            className="jd-textarea"
+            placeholder="Paste the full job description here. Include responsibilities, required skills, and qualifications for the best analysis..."
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
+            rows="7"
+          />
+          <div className={`char-counter ${charCountValid ? "char-counter--valid" : ""}`}>
+            {charCount < minChars ? (
+              <>
+                <span className="char-counter-num">{charCount}</span>
+                <span className="char-counter-hint">/ {minChars} min for best results</span>
+              </>
+            ) : (
+              <>
+                <span className="char-counter-check">✓</span>
+                <span>{charCount} characters</span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
 
-      <button
-  type="submit"
-  className="analyze-btn"
-  disabled={loading}
->
-  {loading ? (
-    <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-      <span className="spinner"></span>
-      Analyzing...
-    </span>
-  ) : (
-    "Analyze Resume"
-  )}
-</button>
+      <button type="submit" className="analyze-btn" disabled={loading || !file || !jobDescription}>
+        {loading ? (
+          <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+            <span className="spinner"></span>
+            Analyzing...
+          </span>
+        ) : (
+          <>Analyze resume →</>
+        )}
+      </button>
     </form>
   );
 }
