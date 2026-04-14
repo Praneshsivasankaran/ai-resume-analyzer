@@ -6,6 +6,12 @@ import "./Home.css";
 function Home() {
   const [result, setResult] = useState(null);
 
+  const handleReset = () => {
+    setResult(null);
+    // Scroll back to the top of the card
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="home">
       {/* HERO */}
@@ -41,8 +47,8 @@ function Home() {
             resume.analyzer
           </div>
 
-          <UploadForm setResult={setResult} />
-          {result && <ScoreDashboard result={result} />}
+          {!result && <UploadForm setResult={setResult} />}
+          {result && <ScoreDashboard result={result} onReset={handleReset} />}
         </div>
       </section>
 
