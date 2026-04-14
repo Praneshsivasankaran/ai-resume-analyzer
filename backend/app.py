@@ -13,17 +13,19 @@ app = FastAPI(title="AI Resume Analyzer API")
 ALLOWED_EXTENSIONS = {".pdf", ".docx"}
 MAX_FILE_SIZE = 2 * 1024 * 1024  # 2MB
 
-# CORS — explicit origins
+# Explicit origins for production + localhost
 ALLOWED_ORIGINS = [
     "https://resumeanalyzer.org",
     "https://www.resumeanalyzer.org",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
 ]
+
+# Regex allows Netlify preview deploys + any localhost port
+ALLOWED_ORIGIN_REGEX = r"^(https://.*\.netlify\.app|http://localhost(:\d+)?|http://127\.0\.0\.1(:\d+)?)$"
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
