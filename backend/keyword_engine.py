@@ -119,4 +119,14 @@ def _looks_technical(w):
 
 
 def keyword_match_score(resume_text, jd_text):
-    resume_embedd
+    resume_embedding = _encode(resume_text)
+    jd_embedding = _encode(QUERY_PREFIX + jd_text)
+
+    similarity = util.cos_sim(resume_embedding, jd_embedding).item()
+    keyword_score = _rescale_similarity(similarity)
+
+    resume_words = _tokenize(resume_text)
+    jd_words = _tokenize(jd_text)
+
+    missing = sorted(w for w in (jd_words - resume_words) if _looks_technical(w))
+    return keyword_score, similarity, missing[:10]
