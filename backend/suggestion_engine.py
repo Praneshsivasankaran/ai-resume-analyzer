@@ -5,53 +5,38 @@ def generate_suggestions(
     ats_issues,
     impact_feedback,
     structure_feedback,
-    grammar_feedback
 ):
-
     suggestions = []
 
-    # --- Keyword Suggestions ---
-    if breakdown["keyword"] < 40:
+    if breakdown["keyword"] < 55:
         suggestions.append(
             "Improve job alignment by incorporating more keywords from the job description."
         )
 
     if missing_keywords:
+        top = missing_keywords[:6]
         suggestions.append(
-            f"Consider adding experience with: {', '.join(missing_keywords)}."
+            f"Consider incorporating these terms from the job description: {', '.join(top)}."
         )
 
-    # --- Skills Suggestions ---
     if missing_skills:
         suggestions.append(
-            f"Strengthen technical stack by adding: {', '.join(missing_skills)}."
+            f"Strengthen your technical stack by adding experience with: {', '.join(missing_skills[:8])}."
         )
 
-    # --- ATS Suggestions ---
     if ats_issues:
         suggestions.extend(ats_issues)
 
-    # --- Impact Suggestions ---
     if impact_feedback:
         suggestions.extend(impact_feedback)
 
-    # --- Structure Suggestions ---
     if structure_feedback:
         suggestions.extend(structure_feedback)
 
-    # --- Grammar Suggestions ---
-    if grammar_feedback:
-        suggestions.extend(grammar_feedback)
+    if breakdown["impact"] >= 85:
+        suggestions.append("Strong measurable achievements detected — great use of quantified impact.")
 
-    # --- High Score Praise ---
-    if breakdown["impact"] >= 90:
-        suggestions.append(
-            "Strong measurable achievements detected — good use of quantified impact."
-        )
-
-    if breakdown["structure"] >= 90:
-        suggestions.append(
-            "Resume structure is clean and ATS-friendly."
-        )
+    if breakdown["structure"] >= 85:
+        suggestions.append("Resume structure is clean and ATS-friendly.")
 
     return suggestions

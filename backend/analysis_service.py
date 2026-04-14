@@ -11,17 +11,13 @@ from suggestion_engine import generate_suggestions
 
 
 def analyze_resume(file_path, jd_text):
-
-    # ---- Extract Resume Text ----
+    # Extract and truncate
     resume_text = extract_text(file_path)
-
-    # ---- Limit text size (prevents slow processing) ----
     resume_text = resume_text[:8000]
     jd_text = jd_text[:4000]
 
-    # ---- Run Analysis Engines in Parallel ----
+    # Run engines in parallel
     with ThreadPoolExecutor() as executor:
-
         keyword_future = executor.submit(keyword_match_score, resume_text, jd_text)
         ats_future = executor.submit(check_ats_rules, resume_text)
         impact_future = executor.submit(analyze_impact, resume_text)
@@ -34,32 +30,23 @@ def analyze_resume(file_path, jd_text):
         skills_score, missing_skills = skills_future.result()
         structure_score, structure_feedback = structure_future.result()
 
-    # ---- Grammar Engine Disabled (Too Slow) ----
-    grammar_score = 10
-    grammar_errors = []
-    grammar_feedback = []
-
-    # ---- Final Score ----
+    # Final score (grammar removed — reweighted)
     final_score = calculate_final_score(
         keyword_score=keyword_score,
         ats_score=ats_score,
         impact_score=impact_score,
         skills_score=skills_score,
         structure_score=structure_score,
-        grammar_score=grammar_score
     )
 
-    # ---- Breakdown Dictionary ----
     breakdown = {
         "keyword": keyword_score,
         "ats": ats_score,
         "impact": impact_score,
         "skills": skills_score,
         "structure": structure_score,
-        "grammar": grammar_score
     }
 
-    # ---- Generate Suggestions ----
     suggestions = generate_suggestions(
         breakdown=breakdown,
         missing_keywords=missing_keywords,
@@ -67,10 +54,8 @@ def analyze_resume(file_path, jd_text):
         ats_issues=ats_issues,
         impact_feedback=impact_feedback,
         structure_feedback=structure_feedback,
-        grammar_feedback=grammar_feedback
     )
 
-    # ---- Final Response ----
     return {
         "total_score": final_score,
         "breakdown": breakdown,
@@ -79,6 +64,5 @@ def analyze_resume(file_path, jd_text):
         "ats_issues": ats_issues,
         "impact_feedback": impact_feedback,
         "structure_feedback": structure_feedback,
-        "grammar_feedback": grammar_feedback,
-        "suggestions": suggestions
+        "suggestions": suggestions,
     }
