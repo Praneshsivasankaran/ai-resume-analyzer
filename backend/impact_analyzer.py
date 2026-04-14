@@ -1,43 +1,41 @@
 import re
 
 
-def analyze_impact(resume_text):
+ACTION_VERBS = [
+    "improved", "increased", "reduced", "optimized", "developed",
+    "built", "designed", "led", "implemented", "launched", "shipped",
+    "delivered", "architected", "automated", "scaled", "migrated",
+    "refactored", "deployed", "created", "established", "managed",
+    "mentored", "collaborated", "analyzed", "engineered", "accelerated",
+    "streamlined", "achieved", "drove", "spearheaded", "pioneered",
+]
 
+
+def analyze_impact(resume_text):
     score = 0
     feedback = []
+    text_lower = resume_text.lower()
 
-    # 1️⃣ Percentage detection
-    percentage_pattern = r'\d+%'
-    percentages = re.findall(percentage_pattern, resume_text)
+    percentages = re.findall(r'\d+\s*%', resume_text)
+    numbers = re.findall(r'\b\d{2,}\b', resume_text)
+    money = re.findall(r'\$\s?\d+', resume_text)
 
-    # 2️⃣ Number detection (basic metrics)
-    number_pattern = r'\b\d{2,}\b'
-    numbers = re.findall(number_pattern, resume_text)
+    action_count = sum(1 for v in ACTION_VERBS if v in text_lower)
 
-    # 3️⃣ Action verbs detection
-    action_verbs = [
-        "improved", "increased", "reduced",
-        "optimized", "developed", "built",
-        "designed", "led", "implemented"
-    ]
-
-    action_count = sum(word in resume_text for word in action_verbs)
-
-    # Scoring logic
-    metric_count = len(percentages) + len(numbers)
+    metric_count = len(percentages) + len(money) + len(numbers)
 
     if metric_count >= 5:
         score += 50
     elif metric_count >= 2:
-        score += 30
+        score += 35
     else:
-        feedback.append("Add more measurable achievements with numbers or percentages")
+        feedback.append("Add more measurable achievements with numbers, percentages, or dollar amounts.")
 
-    if action_count >= 3:
+    if action_count >= 5:
         score += 50
-    elif action_count >= 1:
-        score += 30
+    elif action_count >= 2:
+        score += 35
     else:
-        feedback.append("Use strong action verbs like 'improved', 'optimized', 'built'")
+        feedback.append("Use stronger action verbs (e.g. 'improved', 'optimized', 'led', 'shipped').")
 
-    return score, feedback
+    return int(score), feedback
