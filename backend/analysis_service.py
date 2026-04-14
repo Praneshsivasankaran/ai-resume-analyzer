@@ -11,12 +11,10 @@ from suggestion_engine import generate_suggestions
 
 
 def analyze_resume(file_path, jd_text):
-    # Extract and truncate
     resume_text = extract_text(file_path)
     resume_text = resume_text[:8000]
     jd_text = jd_text[:4000]
 
-    # Run engines in parallel
     with ThreadPoolExecutor() as executor:
         keyword_future = executor.submit(keyword_match_score, resume_text, jd_text)
         ats_future = executor.submit(check_ats_rules, resume_text)
@@ -27,10 +25,9 @@ def analyze_resume(file_path, jd_text):
         keyword_score, similarity, missing_keywords = keyword_future.result()
         ats_score, ats_issues = ats_future.result()
         impact_score, impact_feedback = impact_future.result()
-        skills_score, missing_skills = skills_future.result()
+        skills_score, missing_skills, skills_stats = skills_future.result()
         structure_score, structure_feedback = structure_future.result()
 
-    # Final score (grammar removed — reweighted)
     final_score = calculate_final_score(
         keyword_score=keyword_score,
         ats_score=ats_score,
@@ -61,6 +58,11 @@ def analyze_resume(file_path, jd_text):
         "breakdown": breakdown,
         "missing_keywords": missing_keywords,
         "missing_skills": missing_skills,
+        "matched_skills": skills_stats["matched"],
+        "skills_summary": {
+            "matched": skills_stats["matched_count"],
+            "total": skills_stats["total_jd_skills"],
+        },
         "ats_issues": ats_issues,
         "impact_feedback": impact_feedback,
         "structure_feedback": structure_feedback,

@@ -8,20 +8,26 @@ def generate_suggestions(
 ):
     suggestions = []
 
-    if breakdown["keyword"] < 55:
-        suggestions.append(
-            "Improve job alignment by incorporating more keywords from the job description."
-        )
-
-    if missing_keywords:
-        top = missing_keywords[:6]
-        suggestions.append(
-            f"Consider incorporating these terms from the job description: {', '.join(top)}."
-        )
-
+    # Skills take priority — show those first
     if missing_skills:
         suggestions.append(
             f"Strengthen your technical stack by adding experience with: {', '.join(missing_skills[:8])}."
+        )
+
+    # Filter missing_keywords: drop any that are already in missing_skills (case-insensitive)
+    skill_names_lower = {s.lower() for s in missing_skills}
+    filtered_keywords = [
+        kw for kw in missing_keywords if kw.lower() not in skill_names_lower
+    ]
+
+    if filtered_keywords:
+        suggestions.append(
+            f"Other terms from the job description worth mentioning: {', '.join(filtered_keywords[:6])}."
+        )
+
+    if breakdown["keyword"] < 55:
+        suggestions.append(
+            "Improve overall job alignment by weaving more of the job description's language into your resume."
         )
 
     if ats_issues:
